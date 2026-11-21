@@ -3,14 +3,17 @@
 <head>
 <meta charset="utf-8">
 <title>Blockstudio</title>
-<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="theme-color" content="#141415">
 <style>
 :root{--bg:#1b1b1d;--panel:#272729;--panel2:#2f2f32;--line:#3d3d41;--txt:#e2e2e6;--dim:#9a9aa2;--acc:#0d99ff}
 *{box-sizing:border-box}
-html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:12px/1.3 "Segoe UI",system-ui,sans-serif;overflow:hidden;user-select:none}
+html,body{margin:0;height:100%;background:var(--bg);color:var(--txt);font:12px/1.3 "Segoe UI",system-ui,sans-serif;overflow:hidden;user-select:none;-webkit-user-select:none;-webkit-touch-callout:none;-webkit-tap-highlight-color:transparent;overscroll-behavior:none;touch-action:manipulation}
 svg.ic{width:24px;height:24px;fill:none;stroke:currentColor;stroke-width:1.7;stroke-linecap:round;stroke-linejoin:round;flex:none;display:block}
 .c-play{color:#4ade80}.c-stop{color:#f87171}.c-image{color:#6fd3a0}.c-video{color:#d68bff}.c-sound{color:#ffb84d}.c-part{color:#9fb4c8}.c-sun{color:#ffd36b}
-#app{display:grid;grid-template-rows:28px 94px 1fr 120px;height:100vh}
+#app{display:grid;grid-template-rows:28px 94px 1fr 120px;height:100vh;height:100dvh}
 #app.noout{grid-template-rows:28px 94px 1fr 0}
 #titlebar{background:#141415;display:flex;align-items:center;gap:6px;padding:0 10px;border-bottom:1px solid #000}
 #titlebar b{color:var(--acc);margin-right:12px;display:flex;align-items:center;gap:6px;font-size:13px;letter-spacing:.3px}
@@ -65,6 +68,60 @@ body.playing #playbar{display:block}
 #output{background:#161617;display:flex;flex-direction:column;min-height:0;overflow:hidden;border-top:1px solid #000}
 #out{overflow:auto;flex:1;padding:4px 8px;font:11px Consolas,monospace;user-select:text}
 #out .w{color:#ffb84d}#out .e{color:#ff6b6b}#out .i{color:#7fd1ff}
+
+/* ---------- mobile / touch ---------- */
+#scrim,#touchplay,.drw{display:none}
+#main{position:relative}
+#ribbon{scrollbar-width:none;-webkit-overflow-scrolling:touch}
+#ribbon::-webkit-scrollbar{display:none}
+body.mobile #app{grid-template-rows:38px 70px 1fr 100px}
+body.mobile #app.noout{grid-template-rows:38px 70px 1fr 0}
+body.mobile #titlebar{gap:2px;padding:0 6px;overflow-x:auto;scrollbar-width:none}
+body.mobile #titlebar::-webkit-scrollbar{display:none}
+body.mobile #titlebar b{margin-right:4px;flex:none}
+body.mobile .tab{padding:10px 9px;flex:none}
+body.mobile .drw{display:flex;align-items:center;gap:4px;flex:none;background:#2f2f32;border:1px solid var(--line);color:var(--txt);border-radius:4px;padding:6px 9px;font:600 11px inherit;font-family:inherit;cursor:pointer}
+body.mobile .drw svg.ic{width:15px;height:15px}
+body.mobile .drw:first-of-type{margin-left:auto}
+body.mobile.open-left .drw[data-drawer=left],body.mobile.open-right .drw[data-drawer=right]{background:#0b4a78;border-color:var(--acc)}
+body.mobile .grp{padding:3px 5px}
+body.mobile .grp .gl{display:none}
+body.mobile button.b{min-width:52px;min-height:52px;justify-content:center;padding:4px 6px}
+body.mobile .sl input{width:150px}
+body.mobile #main{grid-template-columns:1fr}
+body.mobile #main>.panel:first-child,body.mobile #right{position:absolute;top:0;bottom:0;z-index:30;width:min(88vw,340px);background:var(--panel);transition:transform .2s ease;box-shadow:0 0 18px #000a}
+body.mobile #main>.panel:first-child{left:0;transform:translateX(-105%)}
+body.mobile #right{right:0;transform:translateX(105%);border-left:1px solid #000}
+body.mobile.open-left #main>.panel:first-child,body.mobile.open-right #right{transform:none}
+body.mobile #scrim{position:absolute;inset:0;z-index:25;background:#0007}
+body.mobile.open-left #scrim,body.mobile.open-right #scrim{display:block}
+body.mobile .ph{padding:8px 10px;font-size:12px}
+body.mobile .it{padding:11px 12px;font-size:13px}
+body.mobile .it svg.ic{width:20px;height:20px}
+body.mobile .row{padding:3px 8px;gap:4px}
+body.mobile .row label{width:72px;font-size:12px}
+body.mobile .row input,body.mobile .row select{font-size:16px;padding:7px 5px;min-height:34px}
+body.mobile .row input[type=checkbox]{min-height:0;width:22px;height:22px}
+body.mobile .row input[type=color]{height:34px}
+body.mobile .pbtn{padding:10px;font-size:13px}
+body.mobile .sec{padding:6px 10px}
+body.mobile #hud{display:none}
+body.mobile #stats{font-size:10px}
+body.mobile #pad{grid-template-columns:repeat(3,44px);grid-auto-rows:44px;gap:4px;right:8px;bottom:8px}
+body.mobile #pad svg.ic{width:22px;height:22px}
+body.mobile #playbar{font-size:11px;padding:4px 10px;max-width:70%;text-align:center;white-space:normal}
+body.mobile #out{font-size:12px}
+body.mobile.playing #pad{display:none}
+body.mobile.playing #touchplay,body.touch.playing #touchplay{display:block}
+body.touch.playing #pad{display:none}
+#touchplay{position:absolute;inset:0;pointer-events:none;z-index:10}
+#dpad{position:absolute;left:12px;bottom:12px;display:grid;grid-template-columns:repeat(3,56px);grid-auto-rows:56px;gap:4px;pointer-events:auto}
+#dpad button,#jump,#tpstop{pointer-events:auto;touch-action:none;background:#000b;border:1px solid #fff4;color:#fff;border-radius:10px;display:flex;align-items:center;justify-content:center;padding:0;cursor:pointer;font:700 13px inherit;font-family:inherit}
+#dpad button.on,#jump.on{background:#0b4a78;border-color:var(--acc)}
+#dpad svg.ic{width:26px;height:26px}
+#jump{position:absolute;right:16px;bottom:22px;width:84px;height:84px;border-radius:50%}
+#tpstop{position:absolute;right:10px;top:34px;padding:8px 14px;border-radius:6px;color:#f87171}
+@media (max-width:420px){body.mobile .logot{display:none}}
 </style>
 </head>
 <body>
@@ -112,10 +169,12 @@ body.playing #playbar{display:block}
 </defs></svg>
 
 <div id="app">
-  <div id="titlebar"><b><svg class="ic"><use href="#i-logo"/></svg>Blockstudio</b>
+  <div id="titlebar"><b><svg class="ic"><use href="#i-logo"/></svg><span class="logot">Blockstudio</span></b>
     <span class="tab on" data-tab="home">HOME</span>
     <span class="tab" data-tab="view">VIEW</span>
     <span class="tab" data-tab="test">TEST</span>
+    <button class="drw" data-drawer="left" title="Toolbox"><svg class="ic"><use href="#i-plus"/></svg>Insert</button>
+    <button class="drw" data-drawer="right" title="Explorer and properties"><svg class="ic"><use href="#i-folder"/></svg>Objects</button>
   </div>
   <div id="ribbon">
     <div class="rb on" id="rb-home">
@@ -182,7 +241,9 @@ body.playing #playbar{display:block}
       <div class="it" data-act="ins:image"><svg class="ic c-image"><use href="#i-image"/></svg>Image</div>
       <div class="it" data-act="ins:video"><svg class="ic c-video"><use href="#i-video"/></svg>Video</div>
       <div class="it" data-act="ins:sound"><svg class="ic c-sound"><use href="#i-sound"/></svg>Sound</div>
+      <div class="it" data-act="media"><svg class="ic"><use href="#i-import"/></svg>Import files...</div>
     </div></div>
+    <div id="scrim"></div>
     <div id="viewport">
       <div id="hud">Drag empty space or RMB to orbit · WASD/QE fly · Arrows orbit · Shift+drag pan · Wheel/pinch zoom · Camera pad (right) · 1-4 tools · F focus · Del delete · Ctrl+Z/Y · Ctrl+D</div>
       <div id="stats"></div>
@@ -196,6 +257,15 @@ body.playing #playbar{display:block}
         <span></span>
         <button data-cam="down" title="Orbit down (hold)"><svg class="ic"><use href="#i-down"/></svg></button>
         <span></span>
+      </div>
+      <div id="touchplay">
+        <div id="dpad">
+          <span></span><button data-key="KeyW" aria-label="Forward"><svg class="ic"><use href="#i-up"/></svg></button><span></span>
+          <button data-key="KeyA" aria-label="Left"><svg class="ic"><use href="#i-left"/></svg></button><span></span><button data-key="KeyD" aria-label="Right"><svg class="ic"><use href="#i-right"/></svg></button>
+          <span></span><button data-key="KeyS" aria-label="Back"><svg class="ic"><use href="#i-down"/></svg></button><span></span>
+        </div>
+        <button id="jump" data-key="Space" aria-label="Jump">JUMP</button>
+        <button id="tpstop" data-act="stop">Stop</button>
       </div>
       <div id="playbar">Playing — WASD move · Space jump · Drag or RMB to turn camera · Wheel zoom · Esc to stop</div>
     </div>
@@ -1011,7 +1081,7 @@ function startPlay(){
   if(playing)return;
   stopPreview();
   playSnap=ser();editorCam={t:cam.t.clone(),yaw:cam.yaw,pitch:cam.pitch,dist:cam.dist};
-  select(null);playing=true;document.body.classList.add('playing');
+  select(null);playing=true;document.body.classList.add('playing');drawer(null);
   $('#playbtn').disabled=true;$('#stopbtn').disabled=false;
   const sp=parts.find(m=>m.userData.name==='SpawnLocation');
   const pos=sp?new THREE.Vector3(sp.position.x,sp.position.y+sp.scale.y/2+.1,sp.position.z):new THREE.Vector3(0,3,0);
@@ -1095,6 +1165,39 @@ function loop(now){
   fpsN++;fpsT+=dt;
   if(fpsT>.5){$('#stats').textContent=Math.round(fpsN/fpsT)+' FPS · '+parts.length+' objects';fpsN=0;fpsT=0;}
 }
+
+
+/* ---------- mobile layer ---------- */
+const mqMobile=matchMedia('(max-width:900px),(max-height:520px)');
+const mqTouch=matchMedia('(pointer:coarse)');
+function applyMode(){
+  document.body.classList.toggle('mobile',mqMobile.matches);
+  document.body.classList.toggle('touch',mqTouch.matches);
+  if(!mqMobile.matches)drawer(null);
+}
+function drawer(side){
+  const b=document.body,cls='open-'+side,was=b.classList.contains(cls);
+  b.classList.remove('open-left','open-right');
+  if(side&&!was)b.classList.add(cls);
+}
+(mqMobile.addEventListener?mqMobile.addEventListener('change',applyMode):mqMobile.addListener(applyMode));
+(mqTouch.addEventListener?mqTouch.addEventListener('change',applyMode):mqTouch.addListener(applyMode));
+document.addEventListener('click',e=>{
+  const d=e.target.closest('[data-drawer]');
+  if(d){drawer(d.dataset.drawer);return;}
+  if(e.target.id==='scrim'){drawer(null);return;}
+  if(document.body.classList.contains('mobile')&&e.target.closest('#main>.panel:first-child [data-act]'))drawer(null);
+});
+document.querySelectorAll('#touchplay [data-key]').forEach(b=>{
+  const k=b.dataset.key;
+  const on=e=>{e.preventDefault();keys.add(k);b.classList.add('on');try{b.setPointerCapture(e.pointerId);}catch(_){}};
+  const off=()=>{keys.delete(k);b.classList.remove('on');};
+  b.addEventListener('pointerdown',on);b.addEventListener('pointerup',off);
+  b.addEventListener('pointercancel',off);b.addEventListener('lostpointercapture',off);
+  b.addEventListener('contextmenu',e=>e.preventDefault());
+});
+applyMode();
+if(mqMobile.matches)$('#app').classList.add('noout');
 
 /* ---------- boot ---------- */
 setTime(14);
